@@ -51,14 +51,20 @@ def analyze_csv(file):
             stddev_price = np.std(prices)
             skew_price = stats.skew(prices)
             var_price = np.var(prices)
+            percentile_5_price = np.percentile(prices, 5)
+            percentile_25_price = np.percentile(prices, 25)
+            percentile_75_price = np.percentile(prices, 75)
+            percentile_95_price = np.percentile(prices, 95)
 
             print("\n=== Price Statistics ===")
-            print("-" * 50)
+            print("-" * 60)
             print(f"{'Max':<12}: {max_price:>8.2f}$   {'Min':<12}: {min_price:>8.2f}$")
-            print(f"{'Mean':<12}: {mean_price:>8.2f}   {'Median':<12}: {median_price:>8.2f}")
-            print(f"{'Mode':<12}: {mode_price:>8.2f}   {'Variance':<12}: {var_price:>8.2f}")
-            print(f"{'Std Dev':<12}: {stddev_price:>8.2f}   {'Skewness':<12}: {skew_price:>8.2f}")
-            print("-" * 50)
+            print(f"{'Mean':<12}: {mean_price:>8.2f}$   {'Median':<12}: {median_price:>8.2f}$")
+            print(f"{'Mode':<12}: {mode_price:>8.2f}$   {'Variance':<12}: {var_price:>8.2f}$")
+            print(f"{'Std Dev':<12}: {stddev_price:>8.2f}$   {'Skewness':<12}: {skew_price:>8.2f}$")
+            print(f"{'5th Percentile':<12}: {percentile_5_price:>8.2f}$   {'25th Percentile':<12}: {percentile_25_price:>8.2f}$")
+            print(f"{'75th Percentile':<12}: {percentile_75_price:>8.2f}$   {'95th Percentile':<12}: {percentile_95_price:>8.2f}$")
+            print("-" * 60)
 
         if pieces:
             max_pieces = max(pieces)
@@ -69,14 +75,20 @@ def analyze_csv(file):
             stddev_pieces = np.std(pieces)
             skew_pieces = stats.skew(pieces)
             var_pieces = np.var(pieces)
+            percentile_5_pieces = np.percentile(pieces, 5)
+            percentile_25_pieces = np.percentile(pieces, 25)
+            percentile_75_pieces = np.percentile(pieces, 75)
+            percentile_95_pieces = np.percentile(pieces, 95)
 
             print("\n=== Pieces Statistics ===")
-            print("-" * 50)
+            print("-" * 60)
             print(f"{'Max':<12}: {max_pieces:>8}   {'Min':<12}: {min_pieces:>8}")
             print(f"{'Mean':<12}: {mean_pieces:>8.2f}   {'Median':<12}: {median_pieces:>8}")
             print(f"{'Mode':<12}: {mode_pieces:>8}   {'Variance':<12}: {var_pieces:>8.2f}")
             print(f"{'Std Dev':<12}: {stddev_pieces:>8.2f}   {'Skewness':<12}: {skew_pieces:>8.2f}")
-            print("-" * 50)
+            print(f"{'5th Percentile':<12}: {percentile_5_pieces:>8}   {'25th Percentile':<12}: {percentile_25_pieces:>8}")
+            print(f"{'75th Percentile':<12}: {percentile_75_pieces:>8}   {'95th Percentile':<12}: {round(percentile_95_pieces, 3):>8}")
+            print("-" * 60)
 
 
 def price_to_piece_ratio(file):
