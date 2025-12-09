@@ -1,7 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv('./sorted_lego_sets.csv')
 
 def calculate_bayes_manual(df, condition_A, condition_B, label_A, label_B):
     N = len(df)
@@ -33,47 +32,6 @@ def calculate_bayes_manual(df, condition_A, condition_B, label_A, label_B):
     return p_a, p_a_given_b
 
 
-# Scenario 1: P(Licensed | Pieces > 1000)
-cond_A1 = df['themeGroup'] == 'Licensed'
-cond_B1 = df['pieces'] > 1000
-p_a1, p_post1 = calculate_bayes_manual(df, cond_A1, cond_B1,
-                                       "Licensed", "Pieces > 1000")
-
-# Scenario 2: P(Price > $100 | Minifigs > 6)
-cond_A2 = df['US_retailPrice'] > 100
-cond_B2 = df['minifigs'] > 6
-p_a2, p_post2 = calculate_bayes_manual(df, cond_A2, cond_B2,
-                                       "Price > $100", "Minifigs > 6")
-
-# Scenario 3: P(Star Wars | Age ≥ 12)
-cond_A3 = df['theme'] == 'Star Wars'
-cond_B3 = df['agerange_min'] >= 12
-p_a3, p_post3 = calculate_bayes_manual(df, cond_A3, cond_B3,
-                                       "Star Wars", "Age ≥ 12")
-
-# Pre-calculation for Scenario 5
-df['price_per_piece'] = df['US_retailPrice'] / df['pieces']
-median_ppp = df['price_per_piece'].median()
-
-# Scenario 4: P(Large Set (>1k pcs) | Year >= 2018)
-cond_A4 = df['pieces'] > 1000
-cond_B4 = df['year'] >= 2018
-p_a4, p_post4 = calculate_bayes_manual(df, cond_A4, cond_B4,
-                                       "Large Set (>1k pcs)", "Year >= 2018")
-
-# Scenario 5: P(High PPP | Licensed)
-cond_A5 = df['price_per_piece'] > median_ppp
-cond_B5 = df['themeGroup'] == 'Licensed'
-p_a5, p_post5 = calculate_bayes_manual(df, cond_A5, cond_B5,
-                                       "High PPP", "Licensed")
-
-# Scenario 6: P(Cheap (<$10) | 1 Minifig)
-cond_A6 = df['US_retailPrice'] < 10
-cond_B6 = df['minifigs'] == 1
-p_a6, p_post6 = calculate_bayes_manual(df, cond_A6, cond_B6,
-                                       "Cheap (<$10)", "1 Minifig")
-
-
 def plot_scenarios(fignum, scenarios, priors, posteriors, title):
     x = range(len(scenarios))
     width = 0.35
@@ -91,26 +49,77 @@ def plot_scenarios(fignum, scenarios, priors, posteriors, title):
     plt.tight_layout()
 
 
-scenarios_1 = [
-    'Licensed | Pieces > 1000',
-    'Price > $100 | Minifigs > 6',
-    'Star Wars | Age ≥ 12'
-]
-priors_1 = [p_a1, p_a2, p_a3]
-posteriors_1 = [p_post1, p_post2, p_post3]
+def run_bayes():
+    try:
+        df = pd.read_csv('./sorted_lego_sets.csv')
+    except FileNotFoundError:
+        print("Error: 'sorted_lego_sets.csv' not found.")
+        return
 
-plot_scenarios(2, scenarios_1, priors_1, posteriors_1, 
-               'Bayesian analysis №2')
+    # Scenario 1: P(Licensed | Pieces > 1000)
+    cond_A1 = df['themeGroup'] == 'Licensed'
+    cond_B1 = df['pieces'] > 1000
+    p_a1, p_post1 = calculate_bayes_manual(df, cond_A1, cond_B1,
+                                           "Licensed", "Pieces > 1000")
 
-scenarios_2 = [
-    'Large Set | New Year',
-    'High PPP | Licensed',
-    'Cheap | 1 Minifig'
-]
-priors_2 = [p_a4, p_a5, p_a6]
-posteriors_2 = [p_post4, p_post5, p_post6]
+    # Scenario 2: P(Price > $100 | Minifigs > 6)
+    cond_A2 = df['US_retailPrice'] > 100
+    cond_B2 = df['minifigs'] > 6
+    p_a2, p_post2 = calculate_bayes_manual(df, cond_A2, cond_B2,
+                                           "Price > $100", "Minifigs > 6")
 
-plot_scenarios(1, scenarios_2, priors_2, posteriors_2, 
-               'Bayesian analysis №1')
+    # Scenario 3: P(Star Wars | Age ≥ 12)
+    cond_A3 = df['theme'] == 'Star Wars'
+    cond_B3 = df['agerange_min'] >= 12
+    p_a3, p_post3 = calculate_bayes_manual(df, cond_A3, cond_B3,
+                                           "Star Wars", "Age ≥ 12")
 
-plt.show()
+    # Pre-calculation for Scenario 5
+    df['price_per_piece'] = df['US_retailPrice'] / df['pieces']
+    median_ppp = df['price_per_piece'].median()
+
+    # Scenario 4: P(Large Set (>1k pcs) | Year >= 2018)
+    cond_A4 = df['pieces'] > 1000
+    cond_B4 = df['year'] >= 2018
+    p_a4, p_post4 = calculate_bayes_manual(df, cond_A4, cond_B4,
+                                           "Large Set (>1k pcs)", "Year >= 2018")
+
+    # Scenario 5: P(High PPP | Licensed)
+    cond_A5 = df['price_per_piece'] > median_ppp
+    cond_B5 = df['themeGroup'] == 'Licensed'
+    p_a5, p_post5 = calculate_bayes_manual(df, cond_A5, cond_B5,
+                                           "High PPP", "Licensed")
+
+    # Scenario 6: P(Cheap (<$10) | 1 Minifig)
+    cond_A6 = df['US_retailPrice'] < 10
+    cond_B6 = df['minifigs'] == 1
+    p_a6, p_post6 = calculate_bayes_manual(df, cond_A6, cond_B6,
+                                           "Cheap (<$10)", "1 Minifig")
+
+    scenarios_1 = [
+        'Licensed | Pieces > 1000',
+        'Price > $100 | Minifigs > 6',
+        'Star Wars | Age ≥ 12'
+    ]
+    priors_1 = [p_a1, p_a2, p_a3]
+    posteriors_1 = [p_post1, p_post2, p_post3]
+
+    plot_scenarios(2, scenarios_1, priors_1, posteriors_1, 
+                   'Bayesian analysis №2')
+
+    scenarios_2 = [
+        'Large Set | New Year',
+        'High PPP | Licensed',
+        'Cheap | 1 Minifig'
+    ]
+    priors_2 = [p_a4, p_a5, p_a6]
+    posteriors_2 = [p_post4, p_post5, p_post6]
+
+    plot_scenarios(1, scenarios_2, priors_2, posteriors_2, 
+                   'Bayesian analysis №1')
+
+    plt.show()
+
+
+if __name__ == "__main__":
+    run_bayes()

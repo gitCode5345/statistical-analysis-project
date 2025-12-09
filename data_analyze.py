@@ -179,8 +179,13 @@ def the_expensive_theme(file):
         print(f"The most expensive LEGO theme is '{expensive_theme_name}' with a price of {max_price_per_piece:.2f}$")
         print("-" * 50)
     
+def run_full_analysis():
+    fileter_csv("lego_sets.csv", "sorted_lego_sets.csv")
+    analyze_csv("sorted_lego_sets.csv")
+    price_to_piece_ratio("sorted_lego_sets.csv")
+    the_expensive_theme("sorted_lego_sets.csv")
 
-fileter_csv("lego_sets.csv", "sorted_lego_sets.csv")
-analyze_csv("sorted_lego_sets.csv")
-price_to_piece_ratio("sorted_lego_sets.csv")
-the_expensive_theme("sorted_lego_sets.csv")
+
+if "__name__" == "__main__":
+    run_full_analysis()
+    
