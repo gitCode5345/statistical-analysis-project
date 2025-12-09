@@ -186,6 +186,6 @@ def run_full_analysis():
     the_expensive_theme("sorted_lego_sets.csv")
 
 
-if "__name__" == "__main__":
+if __name__ == "__main__":
     run_full_analysis()
     
