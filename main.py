@@ -3,15 +3,14 @@ from tkinter import messagebox
 import sys
 import io
 
-# Спроба імпорту модулів
 try:
     import data_analyze
     import lego_analysis
     import bayesian_analysis
 except ImportError as e:
-    print(f"Помилка імпорту модулів: {e}")
-    print("Переконайтеся, що файли data_analyze.py, lego_analysis.py та bayesian_analysis.py знаходяться " \
-          "в тій же директорії, що й main.py.")
+    print(f"Module import error: {e}")
+    print("Make sure that the files data_analyze.py, lego_analysis.py, and bayesian_analysis.py are located " \
+          "in the same directory as main.py.")
 
 class LegoApp:
     def __init__(self, root):
@@ -62,9 +61,6 @@ class LegoApp:
         self.text_area.pack(fill=tk.BOTH, expand=True, padx=10, pady=(5, 10))
 
     def create_custom_btn(self, text, command_func, is_danger=False):
-        """
-        Створює Label, який виглядає і працює як кнопка.
-        """
         bg_color = self.colors["danger_bg"] if is_danger else self.colors["btn_bg"]
         hover_color = self.colors["danger_hover"] if is_danger else self.colors["btn_hover"]
         
